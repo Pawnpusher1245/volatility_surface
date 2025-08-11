@@ -69,11 +69,22 @@ def implied_volatility(market_price, S, K, T, r, option_type='call', q=0.0, low_
         iv = float('nan') 
 
     return iv
-
 def get_spot_price(ticker):
-    data = ticker.history(period="1d")
-    return data['Close'].iloc[-1]
-
+    """
+    Gets the real-time spot price for a ticker.
+    It tries to get the regular market price and falls back to the previous
+    day's close if a real-time price is not available.
+    """
+    info = ticker.info
+    # 'regularMarketPrice' usually holds the most recent trading price.
+    if 'regularMarketPrice' in info and info['regularMarketPrice'] is not None:
+        return info['regularMarketPrice']
+    else:
+        # Fallback for when real-time data is not available (e.g., pre-market)
+        print("Warning: Real-time price not available, using previous day's close.")
+        data = ticker.history(period="1d")
+        return data['Close'].iloc[-1]
+    
 def get_options_data(ticker, option_type):
     """
     Returns all option data and all expiration dates
