@@ -42,8 +42,6 @@ for option in calls_concatenated.itertuples():
         ivs.append(implied_volatility*100)
         yf_iv.append(option.impliedVolatility*100)
         strikes.append(strike_price)
-for i in range(100):
-    print(yf_iv[i], ivs[i])
 print("Plotting...")
 strikes = np.array(strikes)  
 years_to_expiry = np.array(years_to_expiry)
